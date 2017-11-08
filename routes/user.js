@@ -6,7 +6,9 @@ const userController = require('../controller/user');
 const {validateBody, schemas} = require('../helpers/routehelpers')
 
 userRouter.route('/signup')
-  .post(validateBody(schemas.authSchema),userController.signUp)
+  .post(validateBody(schemas.authSchema),userController.signUp, (req,res)=>{
+    res.status(200).json(res.id)
+  })
 
 userRouter.route('/signin')
   .post(userController.signIn)
