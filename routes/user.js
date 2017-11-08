@@ -3,9 +3,10 @@ const userRouter = require('express-promise-router')();
 
 
 const userController = require('../controller/user');
+const {validateBody, schemas} = require('../helpers/routehelpers')
 
 userRouter.route('/signup')
-  .post(userController.signUp)
+  .post(validateBody(schemas.authSchema),userController.signUp)
 
 userRouter.route('/signin')
   .post(userController.signIn)
