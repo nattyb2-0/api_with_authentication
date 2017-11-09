@@ -7,7 +7,9 @@ const {validateBody, schemas} = require('../helpers/routehelpers')
 
 userRouter.route('/signup')
   .post(validateBody(schemas.authSchema),userController.signUp, (req,res)=>{
-    res.status(200).json(res.id)
+    res.status(200).json({
+      id: res.id,
+      token: res.token})
   })
 
 userRouter.route('/signin')
