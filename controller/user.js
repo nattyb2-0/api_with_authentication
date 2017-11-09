@@ -1,6 +1,15 @@
 const JWT = require('jsonwebtoken')
 const database = require('../db/dbconnection')
 
+const signToken = (user)=>{
+  return JWT.sign({
+        iss: 'api_with_auth',
+        sub: user,
+        iat: new Date().getTime(),
+        exp: new Date().setDate(new Date().getDate()+1)
+        },process.env.SECRET)
+}
+
 module.exports = {
   signUp:  (req,res,next)=>{
     // console.log('req.value.body', req.value.body)
@@ -28,12 +37,13 @@ module.exports = {
 
     database.one(`insert into users(email,password) values ($1,$2) returning ID;`,[req.value.body.email, req.value.body.password])
     .then((queryresult)=>{
-      const token = JWT.sign({
-        iss: 'api_with_auth',
-        sub: queryresult,
-        iat: new Date().getTime(),
-        exp: new Date().setDate(new Date().getDate()+1)
-        },process.env.SECRET)
+      // const token = JWT.sign({
+      //   iss: 'api_with_auth',
+      //   sub: queryresult,
+      //   iat: new Date().getTime(),
+      //   exp: new Date().setDate(new Date().getDate()+1)
+      //   },process.env.SECRET)
+      const token = signToken(queryresult);
       res.id = queryresult
       res.token = token
       next()
